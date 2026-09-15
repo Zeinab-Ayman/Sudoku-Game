@@ -1,0 +1,25 @@
+# Visual Studio Temporary Files & Folders
+.vs/
+x64/
+x86/
+Debug/
+Release/
+
+# Build Results & Intermediate Files
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Precompiled Headers & Cache
+*.pch
+*.ipch
