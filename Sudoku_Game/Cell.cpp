@@ -28,11 +28,11 @@ void Cell::setFixed(bool fixed) {
     isFixed_ = fixed;
 }
 
-std::set<int>& Cell::candidates() {
+set<int>& Cell::candidates() {
     return candidates_;
 }
 
-const std::set<int>& Cell::candidates() const {
+const set<int>& Cell::candidates() const {
     return candidates_;
 }
 
