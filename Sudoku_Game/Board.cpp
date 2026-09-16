@@ -54,8 +54,9 @@ bool Board::isPlacementValid(int row, int col, int value) const {
 		return false; 
 	}
 	return isRowValid(row, value) && isColValid(col, value) && isBoxValid(row, col, value);
-    return true;
+    
 }
+
 
 bool Board::isComplete() const {
 	// TODO (FR-10): every cell must be non-empty AND every row/col/box must satisfy
@@ -71,36 +72,8 @@ bool Board::isComplete() const {
 	for (int row = 0; row < SIZE; row++) {
 		for (int col = 0; col < SIZE; col++) {
 			int value = grid[row][col].getValue();
-			for (int othercol = col + 1; othercol < SIZE; othercol++) {
-				if (grid[row][othercol].getValue() == value) {
-					return false;
-				}
-			}
-		}
-	}
-	for (int col = 0; col < SIZE; col++) {
-		for (int row = 0; row < SIZE; row++) {
-			int value = grid[row][col].getValue();
-			for (int otherrow = row + 1; otherrow < SIZE; otherrow++) {
-				if (grid[otherrow][col].getValue() == value) {
-					return false;
-				}
-			}
-		}
-	}
-	for (int startRow = 0; startRow < SIZE; startRow += BOX_SIZE) {
-		for (int startCol = 0; startCol < SIZE; startCol += BOX_SIZE) {
-			for (int row = startRow; row < startRow + BOX_SIZE; row++) {
-				for (int col = startCol; col < startCol + BOX_SIZE; col++) {
-					int value = grid[row][col].getValue();
-					for (int otherRow = startRow; otherRow < startRow + BOX_SIZE; otherRow++) {
-						for (int otherCol = startCol; otherCol < startCol + BOX_SIZE; otherCol++) {
-							if ((row != otherRow || col != otherCol) && grid[otherRow][otherCol].getValue() == value) {
-								return false;
-							}
-						}
-					}
-				}
+			if (!isPlacementValid(row, col, value)) {
+				return false;
 			}
 		}
 	}
@@ -110,6 +83,7 @@ void Board::reset() {
 	for (int row = 0; row < SIZE; row++) {
 		for (int col = 0; col < SIZE; col++) {
 			grid[row][col].setValue(0);
+			grid[row][col].setFixed(false);
 		}
 	}
     
