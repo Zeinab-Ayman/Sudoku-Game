@@ -7,9 +7,8 @@ GameController::GameController()
 void GameController::startNewGame(Difficulty difficulty) {
     board = generator.generate(difficulty);
 
-    // TODO: also compute/store the full solution in solution_, e.g. by
-    // copying board_ and running solver_.solve(solution_) before any
-    // cells are removed -- or have SudokuGenerator return both boards.
+    solution = board;
+    solver.solve(solution);
 
     moveCount = 0;
     mistakeCount = 0;
@@ -17,13 +16,27 @@ void GameController::startNewGame(Difficulty difficulty) {
 }
 
 bool GameController::makeMove(int row, int col, int value) {
-    // TODO: see header comment.
-    return false;
+    if (board.at(row, col).isFixed()) {
+        return false;
+    }
+    int oldValue = board.at(row, col).getValue();
+    board.at(row, col).setValue(value);
+    history.recordMove({ row, col, oldValue, value });
+    moveCount++;
+    if (solution.at(row, col).getValue() != value) {
+        mistakeCount++;
+    }
+    return true;
 }
 
 bool GameController::clearCell(int row, int col) {
-    // TODO: see header comment.
-    return false;
+    if (board.at(row, col).isFixed()) {
+        return false;
+    }
+    int oldValue = board.at(row, col).getValue();
+    board.at(row, col).clearValue();
+    history.recordMove({ row, col, oldValue, 0 });
+    return true;
 }
 
 bool GameController::undo() {
@@ -31,7 +44,7 @@ bool GameController::undo() {
     if (!history.undo(move)) {
         return false;
     }
-    // TODO: apply move.previousValue back onto board.at(move.row, move.col).
+    board.at(move.row, move.col).setValue(move.previousValue);
     return true;
 }
 
