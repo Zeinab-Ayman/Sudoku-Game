@@ -4,10 +4,9 @@
 #include<algorithm>
 using namespace std;
 Board SudokuGenerator::generate(Difficulty difficulty) {
-    Board board;
-
+    Board board; 
     fillDiagonalBoxes(board);
-    fillRemaining(board);
+    fillRemaining(board); 
     int toRemove = cellsToRemove(difficulty);
     removeCells(board, toRemove);
 
@@ -35,38 +34,11 @@ void SudokuGenerator::fillDiagonalBoxes(Board& board) {
 	}
 }
 
- bool SudokuGenerator::fillRemaining(Board& board) {
+ void SudokuGenerator::fillRemaining(Board& board) {
     // TODO: run a backtracking fill (similar to SudokuSolver::solveRecursive)
     // over the remaining empty cells, trying values in randomized order so
     // each generated puzzle is different.
-     int row=-1, col=-1;
-	 for (int r = 0; r < Board::SIZE; r++) {
-		 for (int c = 0; c < Board::SIZE; c++) {
-			 if (board.at(r, c).isEmpty()) {
-				 row = r;
-				 col = c;
-				 break;
-			 }
-		 }
-		 if (row != -1) 
-             break;
-	 }
-	 if (row == -1)
-		 return true; // All cells filled
-	 vector<int> values{ 1,2,3,4,5,6,7,8,9 };
-     random_device rd;
-     mt19937 rng(rd());
-     shuffle(values.begin(), values.end(), rng);
-	 for (int value : values) {
-		 if (board.isPlacementValid(row, col, value)) {
-			 board.at(row, col).setValue(value);
-			 if (fillRemaining(board)) {
-				 return true;
-			 }
-			 board.at(row, col).clear();
-		 }
-	 }
-	 return false;
+     solver.solve(board);
 }
 
 void SudokuGenerator::removeCells(Board& board, int countToRemove) {
@@ -78,20 +50,21 @@ void SudokuGenerator::removeCells(Board& board, int countToRemove) {
   {
 	  int row = rng() % Board::SIZE;
 	  int col = rng() % Board::SIZE;
-	  if (!board.at(row, col).isEmpty())
+	  if (board.at(row, col).isEmpty())
 	  {
-		  int backup = board.at(row, col).getValue();
-		  board.at(row, col).clear();
-		  int  solutions = solver.countSolutions(board,2);
-		  if (solutions == 1)
-		  {
-			  removed++;
-		  }
-		  else
-		  {
-			  board.at(row, col).setValue(backup);
-		  }
-		
+          continue;
+}
+      int backup = board.at(row, col).getValue();
+      board.at(row, col).clearValue();
+	  int numSolutions = solver.countSolutions(board, 2);
+      if (numSolutions == 1)
+      {
+          removed++;
+      }
+      else
+      {
+          board.at(row, col).setValue(backup);
+      }
   }
 }
 

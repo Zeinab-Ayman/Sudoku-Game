@@ -14,10 +14,11 @@ class SudokuGenerator {
 public:
     // Returns a ready-to-play puzzle (with `isFixed` set on the given cells).
     Board generate(Difficulty difficulty);
+   
 
 private:
     SudokuSolver solver;
-
+    
     // TODO: fill the three diagonal 3x3 boxes with random valid 1-9 permutations
     // (they don't affect each other, so this is safe to do without backtracking).
     void fillDiagonalBoxes(Board& board);
