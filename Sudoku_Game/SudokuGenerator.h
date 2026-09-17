@@ -14,17 +14,18 @@ class SudokuGenerator {
 public:
     // Returns a ready-to-play puzzle (with `isFixed` set on the given cells).
     Board generate(Difficulty difficulty);
+   
 
 private:
     SudokuSolver solver;
-
+    
     // TODO: fill the three diagonal 3x3 boxes with random valid 1-9 permutations
     // (they don't affect each other, so this is safe to do without backtracking).
     void fillDiagonalBoxes(Board& board);
 
     // TODO: use SudokuSolver-style backtracking (with randomized value order)
     // to fill in the remaining cells and produce one complete solution.
-    void fillRemaining(Board& board);
+    bool fillRemaining(Board& board);
 
     // TODO: repeatedly pick a random filled cell, remove its value, and use
     // solver_.countSolutions(board) to confirm the puzzle still has exactly
