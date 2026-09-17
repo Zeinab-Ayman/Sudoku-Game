@@ -53,7 +53,7 @@ void SudokuGenerator::removeCells(Board& board, int countToRemove) {
 	  if (board.at(row, col).isEmpty())
 	  {
           continue;
-}
+      }
       int backup = board.at(row, col).getValue();
       board.at(row, col).clearValue();
 	  int numSolutions = solver.countSolutions(board, 2);

@@ -25,7 +25,7 @@ private:
 
     // TODO: use SudokuSolver-style backtracking (with randomized value order)
     // to fill in the remaining cells and produce one complete solution.
-    bool fillRemaining(Board& board);
+    void fillRemaining(Board& board);
 
     // TODO: repeatedly pick a random filled cell, remove its value, and use
     // solver_.countSolutions(board) to confirm the puzzle still has exactly

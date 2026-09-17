@@ -6,13 +6,23 @@ void MoveHistory::recordMove(const Move& move) {
 }
 
 bool MoveHistory::undo(Move& outMove) {
-    // TODO: implement using undoStack_ / redoStack_ (see header comment).
-    return false;
+    if (undoStack.empty()) {
+        return false;
+    }
+    outMove = undoStack.top();
+    undoStack.pop();
+    redoStack.push(outMove);
+    return true;
 }
 
 bool MoveHistory::redo(Move& outMove) {
-    // TODO: implement using undoStack_ / redoStack_ (see header comment).
-    return false;
+    if (redoStack.empty()) {
+        return false;
+    }
+    outMove = redoStack.top();
+    redoStack.pop();
+    undoStack.push(outMove);
+    return true;
 }
 
 void MoveHistory::clearRedo() {
