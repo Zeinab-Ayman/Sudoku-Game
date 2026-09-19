@@ -53,17 +53,31 @@ bool GameController::redo() {
     if (!history.redo(move)) {
         return false;
     }
-    // TODO: apply move.newValue onto board.at(move.row, move.col).
+	 board.at(move.row, move.col).setValue(move.newValue);
     return true;
 }
 
 bool GameController::giveHint(int row, int col) {
-    // TODO: see header comment.
-    return false;
+    
+	if(board.at(row, col).isFixed() || !board.at(row, col).isEmpty()) {
+		return false;
+	}
+	 int hintValue = solution.at(row, col).getValue();
+	 board.at(row, col).setValue(hintValue);
+    hintCount++;
+    return true;
 }
 
 void GameController::solvePuzzle() {
-    // TODO: see header comment.
+    
+	for (int row = 0; row < Board::SIZE; ++row) {
+		for (int col = 0; col < Board::SIZE; ++col) {
+			if (board.at(row, col).isEmpty()) {
+				int solutionValue = solution.at(row, col).getValue();
+				board.at(row, col).setValue(solutionValue);
+			}
+		}
+	}
 }
 
 bool GameController::isSolved() const {
