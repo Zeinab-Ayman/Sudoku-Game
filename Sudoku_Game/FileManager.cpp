@@ -41,7 +41,7 @@ bool FileManager::loadFromFile(const string& filename,
 	if (!in.is_open()) {
 		return false;
 	}
-	for (int row = 0; row < Board::SIZE; ++ro) {
+	for (int row = 0; row < Board::SIZE; ++row) {
 		for (int col = 0; col < Board::SIZE; ++col) {
 			int value;
 			in >> value;
@@ -66,13 +66,4 @@ bool FileManager::loadFromFile(const string& filename,
 		return false; // Error reading stats
 	}
 	return true;
-}
-
-    (void)board;
-    elapsedSeconds = 0;
-    moveCount = 0;
-    mistakeCount = 0;
-    hintCount = 0;
-
-    return true;
 }
