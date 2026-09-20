@@ -1,6 +1,6 @@
 #include "ConsoleUI.h"
 
-#include<iostream>
+//#include<iostream>
 //#include "Board.h"
 //#include "SudokuSolver.h"
 //#include "SudokuGenerator.h"
@@ -8,8 +8,8 @@
 
 using namespace std;
 int main() {
-    /* ConsoleUI ui;
-     ui.run();*/
+     ConsoleUI ui;
+     ui.run();
 
     //test Board class
     /*Board b;
