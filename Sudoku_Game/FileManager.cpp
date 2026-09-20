@@ -13,33 +13,60 @@ bool FileManager::saveToFile(const string& filename,
         return false;
     }
 
-    // TODO: write board values, fixed-cell flags, and the stats above.
-    // Keep the format simple and human-readable, e.g.:
-    //   line 1-9   : board values (space separated, 0 = empty)
-    //   line 10-18 : fixed flags (0/1, space separated)
-    //   line 19    : elapsedSeconds moveCount mistakeCount hintCount
-
-    (void)board;
-    (void)elapsedSeconds;
-    (void)moveCount;
-    (void)mistakeCount;
-    (void)hintCount;
+	for (int row = 0; row < Board::SIZE; ++row) {
+		for (int col = 0; col < Board::SIZE; ++col) {
+			out << board.at(row, col).getValue() << (col < Board::SIZE - 1 ? " " : "");
+		}
+		out << "\n";
+	}
+	for (int row = 0; row < Board::SIZE; ++row) {
+		for (int col = 0; col < Board::SIZE; ++col) {
+			out << (board.at(row, col).isFixed() ? "1" : "0") << (col < Board::SIZE - 1 ? " " : "");
+		}
+		out << "\n";
+	}
+	out << elapsedSeconds << " " << moveCount << " " << mistakeCount << " " << hintCount << "\n";
+   
 
     return true;
 }
 
 bool FileManager::loadFromFile(const string& filename,
-                                Board& board,
-                                int& elapsedSeconds,
-                                int& moveCount,
-                                int& mistakeCount,
-                                int& hintCount) {
-    ifstream in(filename);
-    if (!in.is_open()) {
-        return false;
-    }
-
-    // TODO: parse the same format written by saveToFile, in the same order.
+	Board& board,
+	int& elapsedSeconds,
+	int& moveCount,
+	int& mistakeCount,
+	int& hintCount) {
+	ifstream in(filename);
+	if (!in.is_open()) {
+		return false;
+	}
+	for (int row = 0; row < Board::SIZE; ++ro) {
+		for (int col = 0; col < Board::SIZE; ++col) {
+			int value;
+			in >> value;
+			if (!in) {
+				return false; // Error reading value
+			}
+			board.at(row, col).setValue(value);
+		}
+	}
+	for (int row = 0; row < Board::SIZE; ++row) {
+		for (int col = 0; col < Board::SIZE; ++col) {
+			int fixedFlag;
+			in >> fixedFlag;
+			if (!in) {
+				return false; // Error reading fixed flag
+			}
+			board.at(row, col).setFixed(fixedFlag == 1);
+		}
+	}
+	in >> elapsedSeconds >> moveCount >> mistakeCount >> hintCount;
+	if (!in) {
+		return false; // Error reading stats
+	}
+	return true;
+}
 
     (void)board;
     elapsedSeconds = 0;
