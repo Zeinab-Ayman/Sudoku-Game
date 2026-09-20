@@ -62,19 +62,22 @@ bool Board::isComplete() const {
 	// TODO (FR-10): every cell must be non-empty AND every row/col/box must satisfy
 	// Sudoku rules. A simple approach: loop over all cells, return false if any is empty;
 	// then re-validate every row/column/box.
+	Board copy = *this;
 	for (int row = 0; row < SIZE; row++) {
 		for (int col = 0; col < SIZE; col++) {
-			if (grid[row][col].isEmpty()) {
+			if (copy.at(row, col).isEmpty()) {
 				return false;
 			}
 		}
 	}
 	for (int row = 0; row < SIZE; row++) {
 		for (int col = 0; col < SIZE; col++) {
-			int value = grid[row][col].getValue();
-			if (!isPlacementValid(row, col, value)) {
+			int value = copy.at(row, col).getValue();
+			copy.at(row, col).clearValue();
+			if (!copy.isPlacementValid(row, col, value)) {
 				return false;
 			}
+			copy.at(row, col).setValue(value);
 		}
 	}
 	return true;
