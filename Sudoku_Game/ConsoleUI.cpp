@@ -43,12 +43,14 @@ void ConsoleUI::run() {
             if (controller.loadGame(filename)) {
                 playGameLoop();
             }
+            else {
+                cout << "\n [x] Failed to load the game!\n";
+				system("pause");
+			}
         }
         else if (choice == 3) {
             showInstructions();
-            cout << "\n\n Press Enter to return to menu...";
-            cin.ignore(10000, '\n');
-            cin.get();
+			system("pause");
         }
         else if (choice == 4) {
             exitRequested = true;
@@ -96,6 +98,7 @@ void ConsoleUI::showBoard() const {
 }
 
 void ConsoleUI::playGameLoop() {
+
     bool playing = true;
     while (playing && !controller.isSolved()) {
         showBoard();
@@ -116,18 +119,36 @@ void ConsoleUI::playGameLoop() {
         switch (choice) {
         case 1:
             cout << "\nEnter row (1-9), col (1-9), value (1-9): ";
-            if (cin >> r >> c >> val && r >= 1 && r <= 9 && c >= 1 && c <= 9 && val >= 1 && val <= 9) {
+            if (!(cin >> r >> c >> val)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "\n [x] Invalid input!\n";
+                break;
+            }
+            if (r >= 1 && r <= 9 && c >= 1 && c <= 9 && val >= 1 && val <= 9) {
                 if (!controller.makeMove(r - 1, c - 1, val)) {
-                    cout << "\n Cannot modify a fixed cell!\n";
+                    cout << "\n [x] Cannot modify a fixed cell!\n";
                 }
+            }
+            else {
+                cout << "\n [x] Out of range!\n";
             }
             break;
         case 2:
             cout << "\nEnter row (1-9), col (1-9) to clear: ";
-            if (cin >> r >> c && r >= 1 && r <= 9 && c >= 1 && c <= 9) {
+            if (!(cin >> r >> c)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "\n [x] Invalid input!\n";
+                break;
+            }
+            if (r >= 1 && r <= 9 && c >= 1 && c <= 9) {
                 if (!controller.clearCell(r - 1, c - 1)) {
                     cout << "\n [x] Cannot clear a fixed cell!\n";
                 }
+            }
+            else {
+                cout << "\n [x] Out of range!\n";
             }
             break;
         case 3:
@@ -138,17 +159,31 @@ void ConsoleUI::playGameLoop() {
             break;
         case 5:
             cout << "\n Enter row (1-9), col (1-9) for hint: ";
-            if (cin >> r >> c && r >= 1 && r <= 9 && c >= 1 && c <= 9) {
+            if (!(cin >> r >> c)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "\n [x] Invalid input!\n";
+                break;
+            }
+            if (r >= 1 && r <= 9 && c >= 1 && c <= 9) {
                 if (!controller.giveHint(r - 1, c - 1)) {
                     cout << "\n [x] Cell is not empty!\n";
                 }
+            }
+            else {
+                cout << "\n [x] Out of range!\n";
             }
             break;
         case 6: {
             string fname;
             cout << "\n Enter filename to save: ";
             cin >> fname;
-            controller.saveGame(fname);
+            if (!controller.saveGame(fname)) {
+                cout << "\n [x] Failed to save the game!\n";
+            }
+            else {
+                cout << "\n [*] Game saved successfully!\n";
+            }
             break;
         }
         case 7:
@@ -158,9 +193,11 @@ void ConsoleUI::playGameLoop() {
             playing = false;
             break;
         }
-        if (controller.isSolved()) {
-            showBoard();
-            cout << "\n\n [*] Congratulations! You solved the Sudoku puzzle!\n\n";
-        }
+    }
+    if (controller.isSolved()) {
+        showBoard();
+        cout << "\n\n [*] Congratulations! You solved the Sudoku puzzle!\n\n";
+		system("pause");
+		return;
     }
 }
